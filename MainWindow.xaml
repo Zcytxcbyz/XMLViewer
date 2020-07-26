@@ -1,0 +1,72 @@
+﻿<Window x:Class="XMLViewer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:XMLViewer"
+        xmlns:prop="clr-namespace:XMLViewer.Properties"
+        mc:Ignorable="d"
+        Title="{Binding Path=AppName,Source={x:Static prop:Settings.Default}}"
+        Height="{Binding Height}"
+        Width="{Binding Width}"
+        Left="{Binding Left}"
+        Top="{Binding Top}"
+        WindowState="{Binding WindowState}"
+        Loaded="Window_Loaded" Closing="Window_Closing" SizeChanged="Window_SizeChanged">
+    <Grid x:Name="MainGrid">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Menu Margin="0">
+            <MenuItem Header="{x:Static prop:Resources.Menu_File}">
+                <MenuItem x:Name="Menu_Open" Header="{x:Static prop:Resources.Menu_Open}" HorizontalAlignment="Left" Click="Menu_Open_Click"/>
+                <MenuItem x:Name="Menu_Exit" Header="{x:Static prop:Resources.Menu_Exit}" HorizontalAlignment="Left" Click="Menu_Exit_Click"/>
+            </MenuItem>
+        </Menu>
+        <Grid Margin="0" Grid.Row="1">
+            <TabControl Margin="0" TabStripPlacement="Bottom">
+                <TabItem Header="{x:Static prop:Resources.TabItem_View}">
+                    <Grid Background="#FFE5E5E5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="{Binding LeftTreeWidth}" x:Name="LeftTree"/>
+                            <ColumnDefinition Width="1*"/>
+                        </Grid.ColumnDefinitions>
+                        <GridSplitter Grid.Column="1" HorizontalAlignment="Left" Margin="0" Width="5"/>
+                        <TreeView x:Name="MainTree" Margin="0" TreeViewItem.Selected="MainTree_Selected">
+                            <TreeView.ItemTemplate>
+                                <HierarchicalDataTemplate ItemsSource="{Binding ChildrenNode}">
+                                    <TextBlock Text="{Binding NodeName}"/>
+                                </HierarchicalDataTemplate>
+                            </TreeView.ItemTemplate>
+                        </TreeView>
+                        <Grid Grid.Column="1" Margin="5,0,0,0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="{Binding TopContentHeight}" x:Name="TopContent"/>
+                                <RowDefinition Height="{Binding BottomContentHeight}"  x:Name="BottomContent"/>
+                            </Grid.RowDefinitions>
+                            <TextBox x:Name="ContentText" Margin="0" AcceptsReturn="True" AcceptsTab="True" IsReadOnly="True" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Text="{Binding Content}"/>
+                            <GridSplitter HorizontalAlignment="Stretch" Height="5" Margin="0" VerticalAlignment="Top" Grid.Row="1"/>
+                            <Border Grid.Row="1" Background="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}" BorderThickness="1" BorderBrush="Gray" Padding="0" Margin="0,5,0,0">
+                                <GroupBox Margin="0,5,0,0" Grid.Row="1" Header="{x:Static prop:Resources.GroupBox_Atrrs}">
+                                    <DataGrid x:Name="MainList" Margin="0,5,0,0" Grid.ColumnSpan="2" CanUserReorderColumns="False" IsReadOnly="True" AutoGenerateColumns="False" HorizontalGridLinesBrush="Gray" VerticalGridLinesBrush="Gray" ColumnHeaderStyle="{DynamicResource MainListColumnHeaderStyle}" Padding="0">
+                                        <DataGrid.Columns>
+                                            <DataGridTextColumn Header="Name" Width="1*" Binding="{Binding Name}"/>
+                                            <DataGridTextColumn Header="Value" Width="1*" Binding="{Binding Value}"/>
+                                        </DataGrid.Columns>
+                                    </DataGrid>
+                                </GroupBox>
+                            </Border>
+                        </Grid>
+                    </Grid>
+                </TabItem>
+                <TabItem Header="{x:Static prop:Resources.TabItem_SourceFile}">
+                    <Grid Background="#FFE5E5E5">
+                        <TextBox x:Name="MainText" Margin="0" AcceptsReturn="True" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" AcceptsTab="True" Text="{Binding Path=XMLString,Mode=TwoWay}" IsReadOnly="True"/>
+                    </Grid>
+                </TabItem>
+            </TabControl>
+        </Grid>
+
+    </Grid>
+</Window>
