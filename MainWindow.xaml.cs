@@ -177,10 +177,18 @@ namespace XMLViewer
             if (ofd.ShowDialog() == true)
             {
                 StreamReader sr = new StreamReader(ofd.FileName);
-                XmlData = new XMLData(sr.ReadToEnd());
+                string XMLString = sr.ReadToEnd();
                 sr.Close();
-                MainText.DataContext = XmlData;
-                MainTree.ItemsSource = new List<XMLObject> { XmlData.XMLObject };
+                try 
+                { 
+                    XmlData = new XMLData(XMLString);
+                    MainText.DataContext = XmlData;
+                    MainTree.ItemsSource = new List<XMLObject> { XmlData.XMLObject };
+                }
+                catch(Exception err)
+                {
+                    MessageBox.Show(err.Message, "错误", MessageBoxButton.OK);
+                }
             }
         }
 
